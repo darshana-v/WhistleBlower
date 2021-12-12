@@ -1,4 +1,4 @@
-const whistlerblower = artifacts.require("whistlerblower");
+const whistlerblower = artifacts.require("WhistlerBlower");
 
 /*
  * uncomment accounts to access the test accounts made available by the
