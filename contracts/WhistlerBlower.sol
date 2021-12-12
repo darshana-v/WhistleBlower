@@ -4,11 +4,10 @@ pragma solidity >=0.8.10 <0.9.0;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 contract WhistlerBlower is ERC20 {
-	uint256 public _totalSupply = 10000000;
 	uint256 public initialSupply = 1000000;
 	address public deployer;
 
-	constructor() ERC20("WhistlerBlower", "WHB") {
+	constructor() ERC20("WhistlerBlower Token", "WHLB") {
 		deployer = msg.sender;
 		_mint(msg.sender, initialSupply);
 	}
