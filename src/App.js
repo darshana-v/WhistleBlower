@@ -158,10 +158,9 @@ function App() {
         setpostsCount(count);
         // Load files&sort by the newest
         var vector = [];
-        for (var i = 1; i<=count; i++) {
+        for (var i = count; i>=1; i--) {
           const post = await whistleBlower.methods.posts(i).call()
           vector.push(post);
-          console.log(posts,post);
         }
         setPosts(vector);
       } else {
@@ -176,6 +175,7 @@ function App() {
   
   const [file,updateFile] = useState(null);
   const [Hash, updateHash] = useState(``);
+  
   /**********UPLOADING FILE***********************************************/
   function uploadFile(e){
     console.log(e.target.files[0]);
@@ -209,7 +209,55 @@ function App() {
     setpostsCount(postsCount+1);
   }
   /********************INCREASE UPVOTES***************************************/
+  function increaseUpvotes(id){
+
+    setLoading(true);
+
+    whistleBlower.methods.postUpvoted(id).send({ from: account }).on('transactionHash', (hash) => {
+      console.log(hash);
+      setLoading(false);
+     // loop over the files and find the provided id.
+     let updatedList = posts.map(post => 
+      {
+      if (post.postId == id){
+        const val = Number(post.upvotes)+1;//<-------------------PROBLEM------------------------>
+        console.log("inside map   "+val);
+        return {...post, upvotes : val}; //gets everything that was already in item, and updates "done"
+      } 
+      return post; // else return unmodified item 
+    });
+    setPosts(updatedList); // set state to new object with updated list
+     //window.location.reload()
+    }).on('error', (e) =>{
+      window.alert('Error')
+      setLoading(false);
+    })
+  }
   /********************DECREASE UPVOTES***************************************/
+  function increaseDownvotes(id){
+    setLoading(true);
+
+    whistleBlower.methods.postDownvoted(id).send({ from: account }).on('transactionHash', (hash) => {
+      console.log(hash);
+      setLoading(false);
+     // loop over the files and find the provided id.
+     let updatedList = posts.map(post => 
+      {
+      if (post.postId == id){
+        const val = Number(post.downvotes)+1;//<-------------------PROBLEM------------------------>
+        console.log("inside map   "+val);
+        return {...post, downvotes : val}; //gets everything that was already in item, and updates "done"
+      } 
+      return post; // else return unmodified item 
+    });
+    setPosts(updatedList); // set state to new object with updated list
+     //window.location.reload()
+    }).on('error', (e) =>{
+      window.alert('Error')
+      setLoading(false);
+    })
+
+  }
   return (
     <div className="App">
         
@@ -245,7 +293,7 @@ function App() {
           
           {posts.map((post,key)=>{
             return (
-                  <Grid item xs={12} sm={6} md={4}>
+                  <Grid item xs={12} sm={6} md={4} key={key}>
                 <Card className={classes.card}>
                   
                   <CardHeader
@@ -276,11 +324,11 @@ function App() {
                   <CardActions className={classes.cardActions}>
                   <div className={classes.likes}>
                           <span className={classes.like}>{post.upvotes}</span>
-                          <ThumbUpIcon className={classes.clickableIcon} onClick={()=> alert("liked")}/>
+                          <ThumbUpIcon className={classes.clickableIcon} onClick={()=> increaseUpvotes(post.postId)}/>
                         </div>
                         <div className={classes.likes}>
                         <span className={classes.like}>{post.downvotes}</span>
-                          <ThumbDownIcon className={classes.clickableIcon} onClick={()=> alert("disliked")}/>
+                          <ThumbDownIcon className={classes.clickableIcon} onClick={()=> increaseDownvotes(post.postId)}/>
                         </div>
                     <Box className={classes.author}>          
                       <Box ml={2}>
