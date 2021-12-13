@@ -25,6 +25,7 @@ import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import Form from './Form';
 import Web3 from 'web3';
 import WhistleBlower from './build/contracts/whistlerblower.json'
+import moment from 'moment';
 
 import { create } from "ipfs-http-client";
 const client = create("https://ipfs.infura.io:5001/api/v0");
@@ -117,7 +118,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [posts, setPosts] = useState([]);
   const [whistleBlower, setWhistleBlower] = useState(null);
-  
+  const [postsCount, setpostsCount] = useState(0);
   
   useEffect(()=>{
     async function loadWeb3() {
@@ -153,13 +154,16 @@ function App() {
         const whistleBlower = new web3.eth.Contract(WhistleBlower.abi, networkData.address)
         setWhistleBlower(whistleBlower);
         // Get post count
-        const postsCount = await whistleBlower.methods.postCount().call()
-      
+        const count = await whistleBlower.methods.postCount().call()
+        setpostsCount(count);
         // Load files&sort by the newest
-        for (var i = postsCount; i >= 1; i--) {
+        var vector = [];
+        for (var i = 1; i<=count; i++) {
           const post = await whistleBlower.methods.posts(i).call()
-          setPosts([...posts,post]);
+          vector.push(post);
+          console.log(posts,post);
         }
+        setPosts(vector);
       } else {
         window.alert('whistlerblower contract not deployed to detected network.')
       }
@@ -168,7 +172,7 @@ function App() {
   
     loadWeb3();
     loadBlockchainData();
-  },[])
+  },[postsCount])
   
   const [file,updateFile] = useState(null);
   const [Hash, updateHash] = useState(``);
@@ -202,7 +206,7 @@ function App() {
       window.alert('Error')
       setLoading(false);
     })
-
+    setpostsCount(postsCount+1);
   }
   /********************INCREASE UPVOTES***************************************/
   /********************DECREASE UPVOTES***************************************/
@@ -239,186 +243,57 @@ function App() {
         
         <Grid container spacing={3} >
           
-          <Grid item xs={12} sm={6} md={4}>
-            <Card className={classes.card}>
-              
-              <CardHeader
-              action={
-                <IconButton aria-label="settings">
-                </IconButton>
-              }
-              title="Shrimp and Chorizo Paella"
-              subheader="September 14, 2016"
-              />
-
-              <CardActionArea>
-                <CardMedia
-                  className={classes.media}
-                  image="https://images.pexels.com/photos/2004161/pexels-photo-2004161.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
-                  title="Contemplative Reptile"
-                />
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="h2" className={classes.h} >
-                    React useContext
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary" component="p" className={classes.p}>
-                    Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                    across all continents except Antarctica
-                  </Typography>
-                </CardContent>
-              </CardActionArea>
-
-              <CardActions className={classes.cardActions}>
-              <div className={classes.likes}>
-                      <span className={classes.like}>45</span>
-                      <ThumbUpIcon className={classes.clickableIcon} onClick={()=> alert("liked")}/>
-                    </div>
-                    <div className={classes.likes}>
-                    <span className={classes.like}>45</span>
-                      <ThumbDownIcon className={classes.clickableIcon} onClick={()=> alert("disliked")}/>
-                    </div>
-                <Box className={classes.author}>          
-                  <Box ml={2}>
-                  </Box>
-                </Box>
-                <Box>
-                  <ShareIcon onClick={() => alert("Share")} className={classes.clickableIcon}/>
-                </Box>
-              </CardActions>
-            </Card>
-          </Grid>
-          
-          <Grid item xs={12} sm={6} md={4}>
-            <Card className={classes.card}>
-            <CardHeader
-                action={
-                  <IconButton aria-label="settings">
-                  </IconButton>
-                  }
-                title="Shrimp and Chorizo Paella"
-                subheader="September 14, 2016"
-            />
-              <CardActionArea>
-                <CardMedia
-                  className={classes.media}
-                  image="https://images.pexels.com/photos/34600/pexels-photo.jpg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
-                  title="Contemplative Reptile"
-                />
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="h2" className={classes.h}>
-                    React Router
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary" component="p" className={classes.p}>
-                    Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                    across all continents except Antarctica
-                  </Typography>
-                </CardContent>
-              </CardActionArea>
-              <CardActions className={classes.cardActions}>
-              <div className={classes.likes}>
-                      <span className={classes.like}>45</span>
-                      <ThumbUpIcon className={classes.clickableIcon} onClick={()=> alert("liked")}/>
-                    </div>
-                    <div className={classes.likes}>
-                    <span className={classes.like}>45</span>
-                      <ThumbDownIcon className={classes.clickableIcon} onClick={()=> alert("disliked")}/>
-              </div>
-                <Box className={classes.author}>
-                  <Box ml={2}>      
-                  </Box>
-                </Box>
-                <Box>
-                  <ShareIcon onClick={() => alert("Share")} className={classes.clickableIcon}/>
-                </Box>
-              </CardActions>
-            </Card>
-          </Grid>
-
-          <Grid item xs={12} sm={6} md={4}>
+          {posts.map((post,key)=>{
+            return (
+                  <Grid item xs={12} sm={6} md={4}>
                 <Card className={classes.card}>
-                <CardHeader
+                  
+                  <CardHeader
                   action={
                     <IconButton aria-label="settings">
                     </IconButton>
                   }
-                  title="Shrimp and Chorizo Paella"
-                  subheader="September 14, 2016"
-                />
-                  <CardActionArea>
-                    <CardMedia
-                      className={classes.media}
-                      image="https://images.pexels.com/photos/1181263/pexels-photo-1181263.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
-                      title="Contemplative Reptile"
-                    />
-                    <CardContent>
-                      <Typography gutterBottom variant="h5" component="h2" className={classes.h}>
-                        React useContext
-                      </Typography>
-                      <Typography variant="body2" color="textSecondary" component="p" className={classes.p}>
-                        Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                        across all continents except Antarctica
-                      </Typography>
-                    </CardContent>
-                  </CardActionArea>
-                  <CardActions className={classes.cardActions}>
-                        <div className={classes.likes}>
-                          <span className={classes.like}>45</span>
-                          <ThumbUpIcon className={classes.clickableIcon} onClick={()=> alert("liked")}/>
-                        </div>
-                        <div className={classes.likes}>
-                        <span className={classes.like}>45</span>
-                          <ThumbDownIcon className={classes.clickableIcon} onClick={()=> alert("disliked")}/>
-                        </div>
-                    
-                    <Box>
-                      <ShareIcon onClick={() => alert("Share")} className={classes.clickableIcon}/>
-                    </Box>
-                  </CardActions>
-                </Card>
-          </Grid>
-          
-          <Grid item xs={12} sm={6} md={4}>
-                <Card className={classes.card}>
-                  <CardHeader
-                      action={
-                        <IconButton aria-label="settings">
-                        </IconButton>
-                      }
-                      title="Shrimp and Chorizo Paella"
-                      subheader="September 14, 2016"
+                  title={post.postTitle}
+                  subheader={moment.unix(post.uploadTime).format('h:mm:ss A M/D/Y')}
                   />
+
                   <CardActionArea>
                     <CardMedia
                       className={classes.media}
-                      image="https://images.pexels.com/photos/325111/pexels-photo-325111.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+                      image="https://images.pexels.com/photos/2004161/pexels-photo-2004161.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
                       title="Contemplative Reptile"
                     />
                     <CardContent>
-                      <Typography gutterBottom variant="h5" component="h2" className={classes.h}>
-                        React useContext
+                      <Typography gutterBottom variant="h5" component="h2" className={classes.h} >
+                        {post.postTitle}
                       </Typography>
                       <Typography variant="body2" color="textSecondary" component="p" className={classes.p}>
-                        Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                        across all continents except Antarctica
+                        {post.postDescription}
                       </Typography>
                     </CardContent>
                   </CardActionArea>
+
                   <CardActions className={classes.cardActions}>
                   <div className={classes.likes}>
-                          <span className={classes.like}>45</span>
+                          <span className={classes.like}>{post.upvotes}</span>
                           <ThumbUpIcon className={classes.clickableIcon} onClick={()=> alert("liked")}/>
                         </div>
                         <div className={classes.likes}>
-                        <span className={classes.like}>45</span>
+                        <span className={classes.like}>{post.downvotes}</span>
                           <ThumbDownIcon className={classes.clickableIcon} onClick={()=> alert("disliked")}/>
                         </div>
-                    
+                    <Box className={classes.author}>          
+                      <Box ml={2}>
+                      </Box>
+                    </Box>
                     <Box>
                       <ShareIcon onClick={() => alert("Share")} className={classes.clickableIcon}/>
                     </Box>
                   </CardActions>
                 </Card>
-          </Grid>
+              </Grid>
+            )
+          })}
             
         </Grid>
         

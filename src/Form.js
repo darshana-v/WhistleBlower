@@ -23,6 +23,7 @@ function Form(props) {
       const handleProofChange = (event) =>{
         //console.log(event.target.files);
         setValues({...values, proof: event.target.value})
+        props.uploadFile(event);
       }
     
 
@@ -53,7 +54,7 @@ function Form(props) {
                   </div>
                   <div className="inputField">
                     <label for="proof">Proof</label>
-                    <input type="file" name="proof" value={values.proof} onChange={props.uploadFile}/>
+                    <input type="file" name="proof" value={values.proof} onChange={handleProofChange}/>
                   </div>
                   <div className="inputField">
                     <button onClick={props.generateHash}>Generate IPFS</button>
