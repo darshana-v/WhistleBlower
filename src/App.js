@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -22,7 +22,14 @@ import Button from '@material-ui/core/Button';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 
-import Form from './Form'
+import Form from './Form';
+import Web3 from 'web3';
+import WhistleBlower from './build/contracts/whistlerblower.json'
+
+import { create } from "ipfs-http-client";
+const client = create("https://ipfs.infura.io:5001/api/v0");
+
+
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -102,45 +109,148 @@ const useStyles = makeStyles((theme) => ({
 
 function App() {
   const classes = useStyles();
-  var [isLoggedIn, setLoginStatus] = useState(false);
-  var [newEntry,setNewEntry] = useState(false);
+  
+  const [isLoggedIn, setLoginStatus] = useState(false);
+  const [newEntry,setNewEntry] = useState(false);
+  //useStates for intergration purpose
+  const [account, setAccount] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [posts, setPosts] = useState([]);
+  const [whistleBlower, setWhistleBlower] = useState(null);
+  
+  
+  useEffect(()=>{
+    async function loadWeb3() {
+      //Setting up Web3
+      if (window.ethereum) {
+        window.web3 = new Web3(window.ethereum)
+        await window.ethereum.enable()
+      }
+      else if (window.web3) {
+        window.web3 = new Web3(window.web3.currentProvider)
+      }
+      else {
+        window.alert('Non-Ethereum browser detected. You should consider trying MetaMask!')
+      }
+    }
+    async function loadBlockchainData() {
+      //Declare Web3
+      const web3 = window.web3;
+      //console.log(web3);
+  
+      //Load account
+      const accounts = await web3.eth.getAccounts();
+      console.log(accounts);
+
+      setAccount(accounts[0]); 
+
+      //Network ID
+      const networkId = await web3.eth.net.getId()
+      const networkData = WhistleBlower.networks[networkId]
+      
+      if(networkData) {
+        // Assign contract
+        const whistleBlower = new web3.eth.Contract(WhistleBlower.abi, networkData.address)
+        setWhistleBlower(whistleBlower);
+        // Get post count
+        const postsCount = await whistleBlower.methods.postCount().call()
+      
+        // Load files&sort by the newest
+        for (var i = postsCount; i >= 1; i--) {
+          const post = await whistleBlower.methods.posts(i).call()
+          setPosts([...posts,post]);
+        }
+      } else {
+        window.alert('whistlerblower contract not deployed to detected network.')
+      }
+      setLoading(false);
+      }
+  
+    loadWeb3();
+    loadBlockchainData();
+  },[])
+  
+  const [file,updateFile] = useState(null);
+  const [Hash, updateHash] = useState(``);
+  /**********UPLOADING FILE***********************************************/
+  function uploadFile(e){
+    console.log(e.target.files[0]);
+    updateFile(e.target.files[0]);
+  }
+  /******************** GENERATE HASH*************************************/
+  async function generateHash() {
+    try {
+      const added = await client.add(file);
+      // const url = `https://ipfs.infura.io/ipfs/${added.path}`;
+      // console.log(url);
+      updateHash(added.path);
+    } catch (error) {
+      console.log("Error uploading file: ", error);
+    }
+  }
+  /*********************ADDING TO BLOCKCHAIN**********************************/
+  function addToChain(postDetails){
+    //loading true
+    setLoading(true);
+    //method call
+    whistleBlower.methods.uploadPost(Hash,postDetails.title,postDetails.category,postDetails.description).send({ from: account }).on('transactionHash', (hash) => {
+     setLoading(false);
+     updateFile(null);
+     
+     window.location.reload()
+    }).on('error', (e) =>{
+      window.alert('Error')
+      setLoading(false);
+    })
+
+  }
+  /********************INCREASE UPVOTES***************************************/
+  /********************DECREASE UPVOTES***************************************/
   return (
     <div className="App">
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar className={classes.appBar} position="static">
-        <Toolbar>
-          <IconButton size="large" edge="start" color="primary" aria-label="menu" sx={{ mr: 2 }}>
-            <Typography variant="h5" color="primary" component="div" sx={{ flexGrow: 1 }}>
-              <Link href="#" underline="none">
-                {'WhistleBlower'}
-              </Link>
-            </Typography>
-          </IconButton>
-          <Button className="newEntry" color="primary" style={{position: 'absolute', right: '10%', display: !isLoggedIn || (isLoggedIn && newEntry) ? 'none':'block'}} onClick={() => {setNewEntry(true);}}>New Entry</Button>
-          <Button className="newEntry" color="primary" style={{position: 'absolute', right: '10%', display: isLoggedIn&& newEntry ? 'block':'none'}} onClick={() => {setNewEntry(false);}}>Home</Button>
-          <Button className="login" color="primary" style={{position: 'absolute', right: '1%', display: isLoggedIn ? 'none':'block'}} onClick={() => {setLoginStatus(true);}}>Login</Button>
-          <Button className="logout" color="primary" style={{position: 'absolute', right: '1%', display: !isLoggedIn ? 'none':'block'}} onClick={() => {setNewEntry(false);setLoginStatus(false) ;}}>Logout</Button>
-        </Toolbar>
-      </AppBar>
-      </Box>
-      <Box className={classes.hero}>
-        <Box>WhistleBlower UI</Box>
-      </Box>
+        
+        <Box sx={{ flexGrow: 1 }}>
+          <AppBar className={classes.appBar} position="static">
+            <Toolbar>
+              <IconButton size="large" edge="start" color="primary" aria-label="menu" sx={{ mr: 2 }}>
+                <Typography variant="h5" color="primary" component="div" sx={{ flexGrow: 1 }}>
+                  <Link href="#" underline="none">
+                    {'WhistleBlower'}
+                  </Link>
+                </Typography>
+              </IconButton>
+              <Button className="newEntry" color="primary" style={{position: 'absolute', right: '10%', display: !isLoggedIn || (isLoggedIn && newEntry) ? 'none':'block'}} onClick={() => {setNewEntry(true);}}>New Entry</Button>
+              <Button className="newEntry" color="primary" style={{position: 'absolute', right: '10%', display: isLoggedIn&& newEntry ? 'block':'none'}} onClick={() => {setNewEntry(false);}}>Home</Button>
+              <Button className="login" color="primary" style={{position: 'absolute', right: '1%', display: isLoggedIn ? 'none':'block'}} onClick={() => {setLoginStatus(true);}}>Login</Button>
+              <Button className="logout" color="primary" style={{position: 'absolute', right: '1%', display: !isLoggedIn ? 'none':'block'}} onClick={() => {setNewEntry(false);setLoginStatus(false) ;}}>Logout</Button>
+            </Toolbar>
+          </AppBar>
+        </Box>
+
+        <Box className={classes.hero}>
+          <Box>WhistleBlower UI</Box>
+        </Box>
+
       <Container maxWidth="lg" className={classes.blogsContainer} style={{display: newEntry ? 'none':'block'}}>
+        
         <Typography variant="h4" className={classes.blogTitle}>
           Welcome to The WhistleBlower!
         </Typography>
+        
         <Grid container spacing={3} >
+          
           <Grid item xs={12} sm={6} md={4}>
             <Card className={classes.card}>
-        <CardHeader
-        action={
-          <IconButton aria-label="settings">
-          </IconButton>
-        }
-        title="Shrimp and Chorizo Paella"
-        subheader="September 14, 2016"
-      />
+              
+              <CardHeader
+              action={
+                <IconButton aria-label="settings">
+                </IconButton>
+              }
+              title="Shrimp and Chorizo Paella"
+              subheader="September 14, 2016"
+              />
+
               <CardActionArea>
                 <CardMedia
                   className={classes.media}
@@ -157,6 +267,7 @@ function App() {
                   </Typography>
                 </CardContent>
               </CardActionArea>
+
               <CardActions className={classes.cardActions}>
               <div className={classes.likes}>
                       <span className={classes.like}>45</span>
@@ -176,16 +287,17 @@ function App() {
               </CardActions>
             </Card>
           </Grid>
+          
           <Grid item xs={12} sm={6} md={4}>
             <Card className={classes.card}>
             <CardHeader
-        action={
-          <IconButton aria-label="settings">
-          </IconButton>
-        }
-        title="Shrimp and Chorizo Paella"
-        subheader="September 14, 2016"
-      />
+                action={
+                  <IconButton aria-label="settings">
+                  </IconButton>
+                  }
+                title="Shrimp and Chorizo Paella"
+                subheader="September 14, 2016"
+            />
               <CardActionArea>
                 <CardMedia
                   className={classes.media}
@@ -221,102 +333,112 @@ function App() {
               </CardActions>
             </Card>
           </Grid>
+
           <Grid item xs={12} sm={6} md={4}>
-            <Card className={classes.card}>
-            <CardHeader
-        action={
-          <IconButton aria-label="settings">
-          </IconButton>
-        }
-        title="Shrimp and Chorizo Paella"
-        subheader="September 14, 2016"
-      />
-              <CardActionArea>
-                <CardMedia
-                  className={classes.media}
-                  image="https://images.pexels.com/photos/1181263/pexels-photo-1181263.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
-                  title="Contemplative Reptile"
+                <Card className={classes.card}>
+                <CardHeader
+                  action={
+                    <IconButton aria-label="settings">
+                    </IconButton>
+                  }
+                  title="Shrimp and Chorizo Paella"
+                  subheader="September 14, 2016"
                 />
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="h2" className={classes.h}>
-                    React useContext
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary" component="p" className={classes.p}>
-                    Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                    across all continents except Antarctica
-                  </Typography>
-                </CardContent>
-              </CardActionArea>
-              <CardActions className={classes.cardActions}>
-                    <div className={classes.likes}>
-                      <span className={classes.like}>45</span>
-                      <ThumbUpIcon className={classes.clickableIcon} onClick={()=> alert("liked")}/>
-                    </div>
-                    <div className={classes.likes}>
-                    <span className={classes.like}>45</span>
-                      <ThumbDownIcon className={classes.clickableIcon} onClick={()=> alert("disliked")}/>
-                    </div>
-                
-                <Box>
-                  <ShareIcon onClick={() => alert("Share")} className={classes.clickableIcon}/>
-                </Box>
-              </CardActions>
-            </Card>
-          </Grid>
-          <Grid item xs={12} sm={6} md={4}>
-            <Card className={classes.card}>
-            <CardHeader
-        action={
-          <IconButton aria-label="settings">
-          </IconButton>
-        }
-        title="Shrimp and Chorizo Paella"
-        subheader="September 14, 2016"
-      />
-              <CardActionArea>
-                <CardMedia
-                  className={classes.media}
-                  image="https://images.pexels.com/photos/325111/pexels-photo-325111.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
-                  title="Contemplative Reptile"
-                />
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="h2" className={classes.h}>
-                    React useContext
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary" component="p" className={classes.p}>
-                    Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                    across all continents except Antarctica
-                  </Typography>
-                </CardContent>
-              </CardActionArea>
-              <CardActions className={classes.cardActions}>
-              <div className={classes.likes}>
-                      <span className={classes.like}>45</span>
-                      <ThumbUpIcon className={classes.clickableIcon} onClick={()=> alert("liked")}/>
-                    </div>
-                    <div className={classes.likes}>
-                    <span className={classes.like}>45</span>
-                      <ThumbDownIcon className={classes.clickableIcon} onClick={()=> alert("disliked")}/>
-                    </div>
-                
-                <Box>
-                  <ShareIcon onClick={() => alert("Share")} className={classes.clickableIcon}/>
-                </Box>
-              </CardActions>
-            </Card>
+                  <CardActionArea>
+                    <CardMedia
+                      className={classes.media}
+                      image="https://images.pexels.com/photos/1181263/pexels-photo-1181263.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+                      title="Contemplative Reptile"
+                    />
+                    <CardContent>
+                      <Typography gutterBottom variant="h5" component="h2" className={classes.h}>
+                        React useContext
+                      </Typography>
+                      <Typography variant="body2" color="textSecondary" component="p" className={classes.p}>
+                        Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
+                        across all continents except Antarctica
+                      </Typography>
+                    </CardContent>
+                  </CardActionArea>
+                  <CardActions className={classes.cardActions}>
+                        <div className={classes.likes}>
+                          <span className={classes.like}>45</span>
+                          <ThumbUpIcon className={classes.clickableIcon} onClick={()=> alert("liked")}/>
+                        </div>
+                        <div className={classes.likes}>
+                        <span className={classes.like}>45</span>
+                          <ThumbDownIcon className={classes.clickableIcon} onClick={()=> alert("disliked")}/>
+                        </div>
+                    
+                    <Box>
+                      <ShareIcon onClick={() => alert("Share")} className={classes.clickableIcon}/>
+                    </Box>
+                  </CardActions>
+                </Card>
           </Grid>
           
+          <Grid item xs={12} sm={6} md={4}>
+                <Card className={classes.card}>
+                  <CardHeader
+                      action={
+                        <IconButton aria-label="settings">
+                        </IconButton>
+                      }
+                      title="Shrimp and Chorizo Paella"
+                      subheader="September 14, 2016"
+                  />
+                  <CardActionArea>
+                    <CardMedia
+                      className={classes.media}
+                      image="https://images.pexels.com/photos/325111/pexels-photo-325111.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+                      title="Contemplative Reptile"
+                    />
+                    <CardContent>
+                      <Typography gutterBottom variant="h5" component="h2" className={classes.h}>
+                        React useContext
+                      </Typography>
+                      <Typography variant="body2" color="textSecondary" component="p" className={classes.p}>
+                        Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
+                        across all continents except Antarctica
+                      </Typography>
+                    </CardContent>
+                  </CardActionArea>
+                  <CardActions className={classes.cardActions}>
+                  <div className={classes.likes}>
+                          <span className={classes.like}>45</span>
+                          <ThumbUpIcon className={classes.clickableIcon} onClick={()=> alert("liked")}/>
+                        </div>
+                        <div className={classes.likes}>
+                        <span className={classes.like}>45</span>
+                          <ThumbDownIcon className={classes.clickableIcon} onClick={()=> alert("disliked")}/>
+                        </div>
+                    
+                    <Box>
+                      <ShareIcon onClick={() => alert("Share")} className={classes.clickableIcon}/>
+                    </Box>
+                  </CardActions>
+                </Card>
+          </Grid>
+            
         </Grid>
+        
         <Box my={4} className={classes.paginationContainer}>
           <Pagination count={10} />
         </Box>
 
 
       </Container>
-      <div style={{display: !newEntry ? 'none':'block'}}>
-        <Form />
-
-      </div>
+        
+        {/***************************************FORM *****************************************/}
+        <div style={{display: !newEntry ? 'none':'block'}}>
+        <Form 
+        Hash={Hash}
+        uploadFile={uploadFile}
+        generateHash={generateHash}
+        addToChain={addToChain}
+         />
+        </div>
+    
     </div>
   );
 }

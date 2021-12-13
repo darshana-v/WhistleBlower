@@ -2,13 +2,12 @@ import React,{useState} from "react";
 import './form.css'
 
 
-function Form() {
+function Form(props) {
     const [values,setValues] = useState({
         title: "",
         description: "",
         category: "",
         proof: "",
-        ipfs_link: "",
         date: ""
       });
     
@@ -22,50 +21,54 @@ function Form() {
         setValues({...values, category: event.target.value})
       }
       const handleProofChange = (event) =>{
+        //console.log(event.target.files);
         setValues({...values, proof: event.target.value})
       }
     
-      const handleSubmit = (event) =>{
-        alert("form is submitted");
-        event.preventDefault();
-      }
+
     return (
         <div className="form">
-            <form className="form-content" onSubmit={handleSubmit} >
-        <h3>Create your Entry</h3>
-        <div className="form">
-          <div className="form-left">
-            <div className="inputField">
-              <label for="title">Title</label>
-              <input type="text" name="title" value={values.title} onChange={handleTitleChange} required/>
-            </div>
-            <div className="inputField">
-              <textarea id="desc" placeholder="Add description" value={values.description} onChange={handleDescChange} required></textarea>
-            </div>
-          </div>
+            <form className="form-content" onSubmit={(event)=>{
+              event.preventDefault();
+              props.addToChain({title:values.title,category:values.category,description:values.description})}}
+               >
+              <h3>Create your Entry</h3>
+              <div className="form">
+              {/****************************FORM LEFT**********************/}
+                <div className="form-left">
+                  <div className="inputField">
+                    <label for="title">Title</label>
+                    <input type="text" name="title" value={values.title} onChange={handleTitleChange} required/>
+                  </div>
+                  <div className="inputField">
+                    <textarea id="desc" placeholder="Add description" value={values.description} onChange={handleDescChange} required></textarea>
+                  </div>
+                </div>
 
-          <div className="form-right">
-            <div className="inputField">
-              <label for="category">Category</label>
-              <input type="text" name="category" value={values.category} onChange={handleCategoryChange} required/>
-            </div>
-            <div className="inputField">
-              <label for="proof">Proof</label>
-              <input type="file" name="proof" value={values.proof} onChange={handleProofChange}/>
-            </div>
-            <div className="inputField">
-              <button>Generate IPFS</button>
-              <input type="text" value={values.ipfs_link}/>
-            </div>
-          </div>
-        </div>
+                {/********************** FORM RIGHT ************************/}
+                <div className="form-right">
+                  <div className="inputField">
+                    <label for="category">Category</label>
+                    <input type="text" name="category" value={values.category} onChange={handleCategoryChange} required/>
+                  </div>
+                  <div className="inputField">
+                    <label for="proof">Proof</label>
+                    <input type="file" name="proof" value={values.proof} onChange={props.uploadFile}/>
+                  </div>
+                  <div className="inputField">
+                    <button onClick={props.generateHash}>Generate IPFS</button>
+                    <input type="text" value={props.Hash}/>
+                  </div>
+                </div>
+              </div>
+              {/************************** Buttons**********************/}
+              <div className="form-buttons">
+                  <button id="submit" type="submit">Publish</button>
+                  <button id="cancel" type="reset">Cancel</button>
+              </div>
 
-        <div className="form-buttons">
-            <button id="submit" type="submit">Publish</button>
-            <button id="cancel" type="reset">Cancel</button>
+            </form>
         </div>
-      </form>
-    </div>
     )
 }
 
