@@ -1,4 +1,4 @@
-const whistlerblower = artifacts.require("whistlerblower");
+const whistleBlower = artifacts.require("whistleBlower");
 
 /*
  * uncomment accounts to access the test accounts made available by the
@@ -6,9 +6,9 @@ const whistlerblower = artifacts.require("whistlerblower");
  * See docs: https://www.trufflesuite.com/docs/truffle/testing/writing-tests-in-javascript
  */
 
-contract("whistlerblower", function (/* accounts */) {
+contract("whistleblower", function (/* accounts */) {
   it("should assert true", async function () {
-    await whistlerblower.deployed();
+    await whistleBlower.deployed();
     return assert.isTrue(true);
   });
 });

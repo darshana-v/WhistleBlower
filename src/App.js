@@ -24,7 +24,7 @@ import ThumbDownIcon from "@material-ui/icons/ThumbDown";
 
 import Form from "./Form";
 import Web3 from "web3";
-import WhistleBlower from "./contract/whistlerblower.json";
+import WhistleBlower from "./contract/whistleBlower.json";
 import moment from "moment";
 
 import { create } from "ipfs-http-client";
@@ -157,7 +157,7 @@ function App() {
         setpostsCount(count);
         // Load files&sort by the newest
         var vector = [];
-        for (var i = count; i >= 1; i--) {
+        for (var i = 0; i < count; i++) {
           const post = await whistleBlower.methods.posts(i).call();
           vector.push(post);
         }
