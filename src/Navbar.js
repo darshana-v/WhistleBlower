@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Navbar() {
+function Navbar(props) {
   const classes = useStyles();
   var [isLoggedIn, setLoginStatus] = useState(false);
   var [newEntry, setNewEntry] = useState(false);
@@ -109,7 +109,12 @@ function Navbar() {
       </Box>
     </div>
     <div style={{ display: !newEntry ? "none" : "block" }}>
-          <Form />
+          <Form 
+                Hash={props.Hash}
+                uploadFile={props.uploadFile}
+                generateHash={props.generateHash}
+                addToChain={props.addToChain}
+          />
       </div>
     </div>
   );

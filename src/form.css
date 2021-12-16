@@ -1,7 +1,6 @@
-
 .form-content{
     margin: 30px auto;
-    max-width: 900px;
+    max-width: 1200px;
     text-align: center;
     z-index: 10;
 }
@@ -25,13 +24,15 @@
 
 .inputField{
     margin: 20px;
+    display: grid;
+    grid-template-columns: 1fr 4fr;
 }
 
 .inputField input{
-    min-width: 250px;
+    min-width: 450px;
     border: none;
     background-color: transparent;
-    border-bottom: 3px solid #01003b;
+    border-bottom: 3px solid #0072E5;
     outline-style: none;
     margin-left: 10px;
     padding: 3px;
@@ -46,14 +47,14 @@
     font-size: 18px;
     padding: 15px 20px;
     border-radius: 10px;
-    background-color: #01003b;
+    background-color: #0072E5;
     color: white;
     text-align: center;
     font-weight: bold;
     letter-spacing: 2px;
 }
 #cancel{
-    border: 1px solid #01003b;
+    border: 1px solid #0072E5;
     margin: 30px 10px;
     width: 190px;
     height: 45px;
@@ -61,15 +62,15 @@
     padding: 15px 20px;
     border-radius: 10px;
     background-color: white;
-    color:  #01003b;
+    color:  #0072E5;
     text-align: center;
     font-weight: bold;
     letter-spacing: 2px;
 }
 
 #desc{
-    min-width: 300px;
-    min-height: 150px;
+    min-width: 450px;
+    min-height: 220px;
 
     padding: 5px 10px;
     outline-style: none; 
@@ -92,5 +93,10 @@
 .darkmode--activated input{
     color: white;
     background-color: transparent;
-    border-bottom: 3px solid #020081;
+    border-bottom: 3px solid #0072E5;
+}
+.darkmode--activated textarea{
+    color: white;
+    background-color: transparent;
+    
 }

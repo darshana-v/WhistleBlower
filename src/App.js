@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
   },
   hero: {
     backgroundImage: ` url('https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwallpapercave.com%2Fwp%2FlKeljXZ.jpg&f=1&nofb=1')`,
-    height: "100vh",
+    height: "92vh",
     backgroundPosition: "center",
     backgroundRepeat: "no-repeat",
     backgroundSize: "cover",
@@ -282,7 +282,12 @@ function App() {
   return (
     <div className="App">
     {/************** Navbar ************************/}
-    <Navbar />
+    <Navbar
+          Hash={Hash}
+          uploadFile={uploadFile}
+          generateHash={generateHash}
+          addToChain={addToChain}
+     />
 
       <Box className={classes.hero}>
         <Box>Welcome Guest</Box>
@@ -355,7 +360,8 @@ function App() {
                     </div>
                     {/********************* Comments *************************/}
                     <div className={classes.likes}>
-                    <span className={classes.like}>45</span>
+                    <span className={classes.like}>{0}</span>
+                    {console.log(post)}
                     <Link className={classes.commentTitle} to={`/whistleblowerUI/comments/1`} props={1}>
                     <CommentIcon
                       className={classes.clickableIcon}
