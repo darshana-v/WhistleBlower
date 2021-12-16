@@ -63,6 +63,7 @@
     "react-router-dom": "^6.1.1",
     "react-scripts": "4.0.3",
     "semantic-ui-react": "^2.0.4",
+    "truffle-hdwallet-provider": "^1.0.17",
     "web-vitals": "^1.1.2",
     "web3": "^1.6.1"
   }
