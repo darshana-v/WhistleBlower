@@ -21,6 +21,11 @@ import Button from "@material-ui/core/Button";
 
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import ThumbDownIcon from "@material-ui/icons/ThumbDown";
+import CommentIcon from '@material-ui/icons/Comment';
+import GitHubIcon from '@material-ui/icons/GitHub';
+import YouTubeIcon from '@material-ui/icons/YouTube';
+import { Comment } from "semantic-ui-react";
+import Chip from '@material-ui/core/Chip';
 
 import Form from "./Form";
 import Web3 from "web3";
@@ -35,8 +40,8 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#fff",
   },
   hero: {
-    backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1558981852-426c6c22a060?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80')`,
-    height: "250px",
+    backgroundImage: ` url('https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwallpapercave.com%2Fwp%2FlKeljXZ.jpg&f=1&nofb=1')`,
+    height: "100vh",
     backgroundPosition: "center",
     backgroundRepeat: "no-repeat",
     backgroundSize: "cover",
@@ -274,6 +279,7 @@ function App() {
   }
   return (
     <div className="App">
+    {/************** Navbar ************************/}
       <Box sx={{ flexGrow: 1 }}>
         <AppBar className={classes.appBar} position="static">
           <Toolbar>
@@ -358,15 +364,15 @@ function App() {
       </Box>
 
       <Box className={classes.hero}>
-        <Box>WhistleBlower UI</Box>
+        <Box>Welcome Guest</Box>
       </Box>
 
       <Container
         maxWidth="lg"
         className={classes.blogsContainer}
-        style={{ display: newEntry ? "none" : "block" }}
+        // style={{ display: newEntry ? "none" : "block" }}
       >
-        <Typography variant="h4" className={classes.blogTitle}>
+        <Typography variant="h5" className={classes.blogTitle}>
           Welcome to The WhistleBlower!
         </Typography>
 
@@ -396,7 +402,8 @@ function App() {
                         component="h2"
                         className={classes.h}
                       >
-                        {post.postTitle}
+                        <Chip label="primary" color="primary" className={classes.chip}/>
+                        <Chip label="success" color="success" className={classes.chip}/>
                       </Typography>
                       <Typography
                         variant="body2"
@@ -417,6 +424,7 @@ function App() {
                         onClick={() => increaseUpvotes(post.postId)}
                       />
                     </div>
+                   
                     <div className={classes.likes}>
                       <span className={classes.like}>{post.downvotes}</span>
                       <ThumbDownIcon
@@ -424,6 +432,17 @@ function App() {
                         onClick={() => increaseDownvotes(post.postId)}
                       />
                     </div>
+                    {/********************* Comments *************************/}
+                    <div className={classes.likes}>
+                    <span className={classes.like}>45</span>
+                    <Link className={classes.commentTitle} to={`/whistleblowerUI/comments/1`} props={1}>
+                    <CommentIcon
+                      className={classes.clickableIcon}
+                      onClick={() => alert("comments")}
+                    />
+                    </Link>
+                  </div>
+
                     <Box className={classes.author}>
                       <Box ml={2}></Box>
                     </Box>
@@ -454,7 +473,46 @@ function App() {
           addToChain={addToChain}
         />
       </div>
+
+       
+     <Box 
+        style={{backgroundColor: '#0072E5', 
+        color: 'white',
+        marginTop: '30px',
+        paddingTop: '10px',
+        }}>
+      <Container maxWidth="lg" style={{ paddingBottom : '3px'}}>
+        <Grid container spacing={1}>
+          <Grid item xs={3} sm={6}>
+            <Box>
+              <Link href="/" style={{color: 'white', textDecoration: 'none', fontSize: '25px' }}>
+                <GitHubIcon
+                      style={{marginRight :'10px'}}
+                      onClick={() => alert("github")}
+                />
+                Github
+              </Link>
+            </Box>
+          </Grid>
+          <Grid item xs={3} sm={6}>
+           <Box>
+              <Link href="/" style={{color: 'white', textDecoration: 'none', float: 'right', fontSize: '25px'}}>
+                <YouTubeIcon
+                      style={{marginRight :'10px'}}
+                      onClick={() => alert("github")}
+                />
+                Youtube
+              </Link>
+            </Box>
+          </Grid>
+        </Grid>
+        </Container>
+        <div style={{fontSize: '25px' ,paddingBottom: '10px', marginTop : "10px", textAlign: 'center'}}>
+        Copyright © NonFungibleTeam 2021-22
     </div>
+      </Box>
+      
+      </div>
   );
 }
 

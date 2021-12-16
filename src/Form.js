@@ -58,7 +58,7 @@ function Form(props) {
                   </div>
                   <div className="inputField">
                     <button onClick={props.generateHash}>Generate IPFS</button>
-                    <input type="text" value={props.Hash}/>
+                    <input type="text" value={`https://ipfs.infura.io/ipfs/${props.Hash}`}/>
                   </div>
                 </div>
               </div>
