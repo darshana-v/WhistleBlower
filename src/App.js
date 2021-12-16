@@ -26,6 +26,7 @@ import GitHubIcon from '@material-ui/icons/GitHub';
 import YouTubeIcon from '@material-ui/icons/YouTube';
 import { Comment } from "semantic-ui-react";
 import Chip from '@material-ui/core/Chip';
+import Modal from '@material-ui/core/Modal';
 
 import Navbar from "./Navbar";
 
@@ -111,6 +112,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const modal_style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+  borderRadius: "30px",
+}
+
 function App() {
   const classes = useStyles();
 
@@ -122,6 +136,12 @@ function App() {
   const [posts, setPosts] = useState([]);
   const [whistleBlower, setWhistleBlower] = useState(null);
   const [postsCount, setpostsCount] = useState(0);
+
+  //useStates for Modal purpose
+  // const [open, setOpen] = useState(false);
+  // const handleOpen = () => setOpen(true);
+  // const handleClose = () => setOpen(false);
+  const [modals,setModals] = useState([]);
 
   useEffect(() => {
     async function loadWeb3() {
@@ -164,11 +184,14 @@ function App() {
         setpostsCount(count);
         // Load files&sort by the newest
         var vector = [];
+        var vm = [];
         for (var i = 0; i < count; i++) {
           const post = await whistleBlower.methods.posts(i).call();
           vector.push(post);
+          vm.push({id : post.postId, value: 0});
         }
         setPosts(vector);
+        setModals(vm);
       } else {
         window.alert(
           "whistlerblower contract not deployed to detected network."
@@ -279,6 +302,18 @@ function App() {
         setLoading(false);
       });
   }
+  /********************MODAL ONCLICK***************************************/
+function handleModalClick(id){
+
+  let updatedList = modals.map((modal)=>{
+    if(modal.id == id){
+      const gg = Number(modal.value)^1;
+      return { ...modal, value : gg }
+    }
+    return modal;
+  });
+  setModals(updatedList);
+}
   return (
     <div className="App">
     {/************** Navbar ************************/}
@@ -315,7 +350,7 @@ function App() {
                       .format("h:mm:ss A M/D/Y")}
                   />
 
-                  <CardActionArea>
+                  <CardActionArea onClick={() => handleModalClick(post.postId)}>
                     <CardMedia
                       className={classes.media}
                       image={`https://ipfs.infura.io/ipfs/${post.postHash}`}
@@ -341,7 +376,24 @@ function App() {
                       </Typography>
                     </CardContent>
                   </CardActionArea>
-
+                  {console.log("Modals",modals)}
+                  <Modal
+                    open = {typeof modals[key] === 'undefined'? false : modals[key].value}
+                    onClose={() => handleModalClick(post.postId)}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                  >
+                  <Box sx={modal_style}>
+                      <Typography id="modal-modal-title" variant="h6" component="h2">
+                        <h3>{post.postTitle}</h3>
+                      </Typography>
+                      <img src = {`https://ipfs.infura.io/ipfs/${post.postHash}`} alt="" width="400px"/>
+                      <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                      {post.postDescription}
+                      </Typography>
+                    </Box>
+                  </Modal>
+            
                   <CardActions className={classes.cardActions}>
                     <div className={classes.likes}>
                       <span className={classes.like}>{post.upvotes}</span>
