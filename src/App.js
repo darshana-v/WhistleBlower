@@ -27,6 +27,8 @@ import YouTubeIcon from '@material-ui/icons/YouTube';
 import { Comment } from "semantic-ui-react";
 import Chip from '@material-ui/core/Chip';
 
+import Navbar from "./Navbar";
+
 import Form from "./Form";
 import Web3 from "web3";
 import WhistleBlower from "./contract/whistleBlower.json";
@@ -280,88 +282,7 @@ function App() {
   return (
     <div className="App">
     {/************** Navbar ************************/}
-      <Box sx={{ flexGrow: 1 }}>
-        <AppBar className={classes.appBar} position="static">
-          <Toolbar>
-            <IconButton
-              size="large"
-              edge="start"
-              color="primary"
-              aria-label="menu"
-              sx={{ mr: 2 }}
-            >
-              <Typography
-                variant="h5"
-                color="primary"
-                component="div"
-                sx={{ flexGrow: 1 }}
-              >
-                <Link href="#" underline="none">
-                  {"WhistleBlower"}
-                </Link>
-              </Typography>
-            </IconButton>
-            <Button
-              className="newEntry"
-              color="primary"
-              style={{
-                position: "absolute",
-                right: "10%",
-                display:
-                  !isLoggedIn || (isLoggedIn && newEntry) ? "none" : "block",
-              }}
-              onClick={() => {
-                setNewEntry(true);
-              }}
-            >
-              New Entry
-            </Button>
-            <Button
-              className="newEntry"
-              color="primary"
-              style={{
-                position: "absolute",
-                right: "10%",
-                display: isLoggedIn && newEntry ? "block" : "none",
-              }}
-              onClick={() => {
-                setNewEntry(false);
-              }}
-            >
-              Home
-            </Button>
-            <Button
-              className="login"
-              color="primary"
-              style={{
-                position: "absolute",
-                right: "1%",
-                display: isLoggedIn ? "none" : "block",
-              }}
-              onClick={() => {
-                setLoginStatus(true);
-              }}
-            >
-              Login
-            </Button>
-            <Button
-              className="logout"
-              color="primary"
-              style={{
-                position: "absolute",
-                right: "1%",
-                display: !isLoggedIn ? "none" : "block",
-              }}
-              onClick={() => {
-                setNewEntry(false);
-                setLoginStatus(false);
-              }}
-            >
-              Logout
-            </Button>
-          </Toolbar>
-        </AppBar>
-      </Box>
+    <Navbar />
 
       <Box className={classes.hero}>
         <Box>Welcome Guest</Box>
@@ -392,7 +313,7 @@ function App() {
                   <CardActionArea>
                     <CardMedia
                       className={classes.media}
-                      image="https://images.pexels.com/photos/2004161/pexels-photo-2004161.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+                      image={`https://ipfs.infura.io/ipfs/${post.postHash}`}
                       title="Contemplative Reptile"
                     />
                     <CardContent>
@@ -402,8 +323,8 @@ function App() {
                         component="h2"
                         className={classes.h}
                       >
-                        <Chip label="primary" color="primary" className={classes.chip}/>
-                        <Chip label="success" color="success" className={classes.chip}/>
+                        <Chip label={post.postCategory} color="success" className={classes.chip}/>
+
                       </Typography>
                       <Typography
                         variant="body2"
@@ -463,16 +384,6 @@ function App() {
           <Pagination count={10} />
         </Box>
       </Container>
-
-      {/***************************************FORM *****************************************/}
-      <div style={{ display: !newEntry ? "none" : "block" }}>
-        <Form
-          Hash={Hash}
-          uploadFile={uploadFile}
-          generateHash={generateHash}
-          addToChain={addToChain}
-        />
-      </div>
 
        
      <Box 
