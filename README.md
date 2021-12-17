@@ -1,8 +1,8 @@
 # WhistleBlower
 
-<p align="center"><img src="https://github.com/darshana-v/WhistleBlower/blob/master/WB_2.png" width = "25%" height = "25%"></p>
+<p align="center"><img src="https://github.com/pjflux2001/whistleblowerUI/blob/main/WB_2.png" width = "25%" height = "25%"></p>
 
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://en.wikipedia.org/wiki/MIT_License) [![Website](https://img.shields.io/badge/View-Website-blue)]()
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)]() [![Website](https://img.shields.io/badge/View-Website-blue)](https://pjflux2001.github.io/whistleblowerUI/)
 
 <strong>Defending facts on the web</strong>
 
@@ -59,7 +59,7 @@ You can find the demo video at [care-quest.herokuapp.com](https://care-quest.her
 
 ## The architecture
 
-<p align="center"><img src="https://github.com/darshana-v/WhistleBlower/blob/master/arch.png?raw=true" width = "66%" height = "66%"></p>
+<p align="center"><img src="https://i.imgur.com/9W8iegr.png" width = "66%" height = "66%"></p>
 
 ## Live demo
 
