@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
   },
   hero: {
     backgroundImage: ` url('https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwallpapercave.com%2Fwp%2FlKeljXZ.jpg&f=1&nofb=1')`,
-    height: "100%",
+    height: "66.5vh",
     backgroundPosition: "center",
     backgroundRepeat: "no-repeat",
     backgroundSize: "cover",
