@@ -243,7 +243,7 @@ function App() {
         // Load files&sort by the newest
         var vector = [];
         var vm = [];
-        for (var i = 0; i < count; i++) {
+        for (var i = count; i >=1; i--) {
           const post = await whistleBlower.methods.posts(i).call();
           vector.push(post);
           vm.push({id : post.postId, value: 0});
