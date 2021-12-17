@@ -44,30 +44,36 @@ const useStyles = makeStyles((theme) => ({
   },
   hero: {
     backgroundImage: ` url('https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwallpapercave.com%2Fwp%2FlKeljXZ.jpg&f=1&nofb=1')`,
-    height: "92vh",
+    height: "66.5vh",
     backgroundPosition: "center",
     backgroundRepeat: "no-repeat",
     backgroundSize: "cover",
     position: "relative",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    color: "#fff",
-    fontSize: "4rem",
-    [theme.breakpoints.down("sm")]: {
-      height: 300,
-      fontSize: "3em",
-    },
+    // display: "flex",
+    // justifyContent: "center",
+    // alignItems: "center",
+    // color: "#fff",
+    // fontSize: "4rem",
+    // [theme.breakpoints.down("sm")]: {
+    //   height: 300,
+    //   fontSize: "3em",
+    // },
   },
   blogsContainer: {
     paddingTop: theme.spacing(3),
   },
   blogTitle: {
-    fontWeight: 800,
+    fontWeight: 600,
+    textAlign: "center",
+    padding: "40px",
+    fontSize: "32px",
     paddingBottom: theme.spacing(3),
+    fontFamily: 'Montserrat, sans-serif',
   },
+
   card: {
     maxWidth: "100%",
+    boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
   },
   media: {
     height: 240,
@@ -76,6 +82,23 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     margin: "0 10px",
     justifyContent: "space-between",
+  },
+  commentBox: {
+    display: "flex",
+    flexDirection: "row",
+    margin: "0 10px",
+  },
+  commentBody: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "flex-start",
+    margin: "0 5px",
+    fontSize: "0.75em",
+  },
+  commentTitle: {
+    color: "blue",
+    isolation: "isolate"
+    
   },
   author: {
     display: "flex",
@@ -88,8 +111,8 @@ const useStyles = makeStyles((theme) => ({
     color: "#0072E5",
     isolation: "isolate",
     "&:hover": {
-      color: "green",
-      background: "#E8E8E8",
+      color: "#43a1ff",
+      background: "transparent",
       padding: "3px",
       borderRadius: "50%",
       isolation: "isolate",
@@ -110,7 +133,39 @@ const useStyles = makeStyles((theme) => ({
   h: {
     color: "rgb(95, 95, 95)",
   },
+  chip: {
+    marginRight: "2.5px",
+    marginLeft: "2.5px"
+  },
+  row: {
+    maxWidth: '1140px',
+    margin: '0 auto',
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
+   rowLeft:{
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      color: '#fff',
+  },
+  leftTitle:{
+    fontSize: '4rem',
+    fontFamily: 'Roboto, sans-serif'
+  },
+  tagLine:{
+    fontSize: '2.5rem',
+    fontWeight: '400',
+    fontFamily: 'Montserrat, sans-serif',
+  },
+  footerDiv:{
+    display:'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  }
+  
 }));
+
 
 const modal_style = {
   position: 'absolute',
@@ -122,7 +177,10 @@ const modal_style = {
   border: '2px solid #000',
   boxShadow: 24,
   p: 4,
-  borderRadius: "30px",
+  borderRadius: "10px",
+  overflowY: 'initial',
+  height: '80vh',
+  overflowY: 'auto',
 }
 
 function App() {
@@ -325,16 +383,24 @@ function handleModalClick(id){
      />
 
       <Box className={classes.hero}>
-        <Box>Welcome Guest</Box>
+          <div className={classes.row}>
+            <div className={classes.rowLeft}>
+              <div className={classes.leftTitle}>Welcome to<br/><strong>Whistle Blower!</strong></div>
+              <div className={classes.tagLine}>Defending facts on the web</div>
+            </div> 
+            <div className={classes.rowRight}>
+                <img src="https://media.discordapp.net/attachments/919450418499710997/921313013997400104/The_7_Elements_of_Art.png" width={'100%'} ></img>
+            </div>
+          </div>  
       </Box>
-
+    
       <Container
         maxWidth="lg"
         className={classes.blogsContainer}
         // style={{ display: newEntry ? "none" : "block" }}
       >
         <Typography variant="h5" className={classes.blogTitle}>
-          Welcome to The WhistleBlower!
+          <h2>Explore</h2>
         </Typography>
 
         <Grid container spacing={3}>
@@ -355,6 +421,7 @@ function handleModalClick(id){
                       className={classes.media}
                       image={`https://ipfs.infura.io/ipfs/${post.postHash}`}
                       title="Contemplative Reptile"
+                      style={{backgoundImage : 'url("https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png")'}}
                     />
                     <CardContent>
                       <Typography
@@ -385,9 +452,10 @@ function handleModalClick(id){
                   >
                   <Box sx={modal_style}>
                       <Typography id="modal-modal-title" variant="h6" component="h2">
-                        <h3>{post.postTitle}</h3>
+                        <h3 style={{textAlign : 'center'}}>{post.postTitle}</h3>
                       </Typography>
-                      <img src = {`https://ipfs.infura.io/ipfs/${post.postHash}`} alt="" width="400px"/>
+                      {/* <img src = {`https://ipfs.infura.io/ipfs/${post.postHash}`}  width="400px"/> */}
+                      <img src={`https://ipfs.infura.io/ipfs/${post.postHash}`} onError={(e)=>{e.target.onerror = null; e.target.src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png"}} width = "400px"/>
                       <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                       {post.postDescription}
                       </Typography>
@@ -444,42 +512,33 @@ function handleModalClick(id){
       </Container>
 
        
-     <Box 
-        style={{backgroundColor: '#0072E5', 
-        color: 'white',
-        marginTop: '30px',
-        paddingTop: '10px',
-        }}>
-      <Container maxWidth="lg" style={{ paddingBottom : '3px'}}>
-        <Grid container spacing={1}>
-          <Grid item xs={3} sm={6}>
-            <Box>
-              <Link href="/" style={{color: 'white', textDecoration: 'none', fontSize: '25px' }}>
-                <GitHubIcon
-                      style={{marginRight :'10px'}}
-                      onClick={() => alert("github")}
-                />
-                Github
-              </Link>
-            </Box>
-          </Grid>
-          <Grid item xs={3} sm={6}>
-           <Box>
-              <Link href="/" style={{color: 'white', textDecoration: 'none', float: 'right', fontSize: '25px'}}>
-                <YouTubeIcon
-                      style={{marginRight :'10px'}}
-                      onClick={() => alert("github")}
-                />
-                Youtube
-              </Link>
-            </Box>
-          </Grid>
-        </Grid>
-        </Container>
-        <div style={{fontSize: '25px' ,paddingBottom: '10px', marginTop : "10px", textAlign: 'center'}}>
-        Copyright © NonFungibleTeam 2021-22
-    </div>
-      </Box>
+      <Box 
+  style={{backgroundColor: '#0072E5', 
+  color: 'white',
+  marginTop: '30px',
+  float: 'bottom',
+  positon: 'sticky'
+  }}>        
+  <Container maxWidth="lg" style={{ paddingBottom : '30px', paddingTop: '30px'}}>
+      <div className={classes.footerDiv}>
+      <div style={{ fontSize: '15px' ,paddingBottom: '10px', marginTop : "10px", textAlign: 'center'}}>
+      <YouTubeIcon
+        className={classes.clickableIcon}
+        style={{marginRight :'10px',marginLeft : '10px', color: 'white'}}
+        onClick={() => alert("link toh daal bro")}
+      />
+      </div>
+      <div>Copyright © NonFungibleTeam 2021-22</div>
+      <div>
+        <GitHubIcon
+          className={classes.clickableIcon}
+          style={{marginRight :'10px',marginLeft : '10px', color: 'white'}}
+          onClick={() => window.open('https://github.com/darshana-v/WhistleBlower', '_blank')}
+        />
+      </div>
+      </div>
+  </Container>
+</Box>
       
       </div>
   );

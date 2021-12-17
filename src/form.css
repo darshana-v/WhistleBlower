@@ -6,14 +6,19 @@
 }
 
 .form-content h3{
-    color: #01003b;
-    font-size: 20px;
+    color: #0072E5;
+    font-size: 32px;
 }
 
 .form{
     display: flex;
     justify-content: space-between;
     margin: 30px auto;
+}
+.formDiv{
+    display: flex;
+    justify-content: space-between;
+    text-align: left;
 }
 
 .form-left, .form-right{
