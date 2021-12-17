@@ -2,7 +2,7 @@
 
 <p align="center"><img src="https://github.com/darshana-v/WhistleBlower/blob/master/WB_2.png" width = "25%" height = "25%"></p>
 
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)]() [![Website](https://img.shields.io/badge/View-Website-blue)]()
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://en.wikipedia.org/wiki/MIT_License) [![Website](https://img.shields.io/badge/View-Website-blue)]()
 
 <strong>Defending facts on the web</strong>
 
