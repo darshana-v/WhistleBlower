@@ -243,7 +243,8 @@ function App() {
         // Load files&sort by the newest
         var vector = [];
         var vm = [];
-        for (var i = count; i >=1; i--) {
+        //for (var i = count; i >=1; i--) {
+        for (var i = count-1; i >=0; i--) {
           const post = await whistleBlower.methods.posts(i).call();
           vector.push(post);
           vm.push({id : post.postId, value: 0});
@@ -529,7 +530,7 @@ function handleModalClick(id){
       <YouTubeIcon
         className={classes.clickableIcon}
         style={{marginRight :'10px',marginLeft : '10px', color: 'white'}}
-        onClick={() => alert("link toh daal bro")}
+        onClick={() => window.open("https://www.youtube.com/channel/UCTF80cOCjQcEDvV4QIQeEQA",'_blank')}
       />
       <GitHubIcon
           className={classes.clickableIcon}

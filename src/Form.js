@@ -57,7 +57,9 @@ function Form(props) {
                     <input type="file" name="proof" value={values.proof} onChange={handleProofChange}/>
                   </div>
                   <div className="inputField">
-                    <button onClick={props.generateHash}>Generate IPFS</button>
+                    <button onClick={(event)=> { event.preventDefault();
+                    props.generateHash()}}>
+                    Generate IPFS</button>
                     <input type="text" value={`https://ipfs.infura.io/ipfs/${props.Hash}`}/>
                   </div>
                 </div>
