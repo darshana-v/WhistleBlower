@@ -34,7 +34,7 @@ function Form(props) {
               props.addToChain({title:values.title,category:values.category,description:values.description})}}
                >
               <h3>Create your Entry</h3>
-              <div className="form">
+              <div className="formDiv">
               {/****************************FORM LEFT**********************/}
                 <div className="form-left">
                   <div className="inputField">

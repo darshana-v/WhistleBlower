@@ -14,7 +14,8 @@ const useStyles = makeStyles((theme) => ({
   logo: {
     textDecoration: 'none',
     color: '#0072E5',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    fontFamily: 'Monoton, cursive',
   },
 }));
 
@@ -42,7 +43,7 @@ function Navbar(props) {
                 sx={{ flexGrow: 1 }}
               >
                 <div className={classes.logo}>
-                  {"WhistleBlower"}
+                  {"WB"}
                 </div>
               </Typography>
             </IconButton>
