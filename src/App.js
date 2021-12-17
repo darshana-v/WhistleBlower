@@ -211,7 +211,7 @@ function App() {
         window.web3 = new Web3(window.web3.currentProvider);
       } else {
         window.alert(
-          "Non-Ethereum browser detected. You should consider trying MetaMask!"
+          "1.Non-Ethereum browser detected. You should consider trying MetaMask!"
         );
       }
     }
@@ -253,7 +253,7 @@ function App() {
         setModals(vm);
       } else {
         window.alert(
-          "whistlerblower contract not deployed to detected network."
+          "In Metamask,Connect to Ropsten Network"
         );
       }
       setLoading(false);
