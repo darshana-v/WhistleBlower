@@ -2,7 +2,7 @@
 
 <p align="center"><img src="https://github.com/pjflux2001/whistleblowerUI/blob/main/WB_2.png" width = "25%" height = "25%"></p>
 
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)]() [![Website](https://img.shields.io/badge/View-Website-blue)](https://pjflux2001.github.io/whistleblowerUI/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)]() [![Website](https://img.shields.io/badge/View-Website-blue)](wb.noormohammed.tech)
 
 <strong>Defending facts on the web</strong>
 
