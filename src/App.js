@@ -73,7 +73,7 @@ const useStyles = makeStyles((theme) => ({
 
   card: {
     maxWidth: "100%",
-    boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
+    boxShadow: "0 0 1em rgba(0, 0, 0, 0.5)",
   },
   media: {
     height: 240,
@@ -403,7 +403,7 @@ function handleModalClick(id){
           <h2>Explore</h2>
         </Typography>
 
-        <Grid container spacing={3}>
+        <Grid container spacing={5}>
           {posts.map((post, key) => {
             return (
               <Grid item xs={12} sm={6} md={4} key={key}>
@@ -521,16 +521,17 @@ function handleModalClick(id){
   }}>        
   <Container maxWidth="lg" style={{ paddingBottom : '30px', paddingTop: '30px'}}>
       <div className={classes.footerDiv}>
+      <div>
+        <img src="https://cdn.discordapp.com/attachments/919450418499710997/921367864852766740/NFT_team_Logo_500_x_300_px.png" width='200px'></img>
+      </div>
+      <div>Copyright © NonFungibleTeam 2021-22</div>
       <div style={{ fontSize: '15px' ,paddingBottom: '10px', marginTop : "10px", textAlign: 'center'}}>
       <YouTubeIcon
         className={classes.clickableIcon}
         style={{marginRight :'10px',marginLeft : '10px', color: 'white'}}
         onClick={() => alert("link toh daal bro")}
       />
-      </div>
-      <div>Copyright © NonFungibleTeam 2021-22</div>
-      <div>
-        <GitHubIcon
+      <GitHubIcon
           className={classes.clickableIcon}
           style={{marginRight :'10px',marginLeft : '10px', color: 'white'}}
           onClick={() => window.open('https://github.com/darshana-v/WhistleBlower', '_blank')}
