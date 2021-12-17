@@ -1,6 +1,6 @@
 # WhistleBlower
 
-<p align="center"><img src="https://github.com/darshana-v/WhistleBlower/blob/main/WB_2.png" width = "25%" height = "25%"></p>
+<p align="center"><img src="https://github.com/darshana-v/WhistleBlower/blob/master/WB_2.png" width = "25%" height = "25%"></p>
 
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)]() [![Website](https://img.shields.io/badge/View-Website-blue)]()
 
@@ -59,7 +59,7 @@ You can find the demo video at [care-quest.herokuapp.com](https://care-quest.her
 
 ## The architecture
 
-<p align="center"><img src="https://github.com/darshana-v/WhistleBlower/blob/main/arch.png?raw=true" width = "66%" height = "66%"></p>
+<p align="center"><img src="https://github.com/darshana-v/WhistleBlower/blob/master/arch.png?raw=true" width = "66%" height = "66%"></p>
 
 ## Live demo
 
