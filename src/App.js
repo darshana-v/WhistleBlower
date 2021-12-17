@@ -301,7 +301,7 @@ function App() {
         window.location.reload();
       })
       .on("error", (e) => {
-        window.alert("Error");
+        // window.alert("Error");
         setLoading(false);
       });
     setpostsCount(postsCount + 1);
@@ -329,7 +329,7 @@ function App() {
         //window.location.reload()
       })
       .on("error", (e) => {
-        window.alert("Error");
+        //window.alert("Error");
         setLoading(false);
       });
   }
@@ -356,7 +356,7 @@ function App() {
         //window.location.reload()
       })
       .on("error", (e) => {
-        window.alert("Error");
+       // window.alert("Error");
         setLoading(false);
       });
   }
