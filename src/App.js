@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
   },
   hero: {
     backgroundImage: ` url('https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwallpapercave.com%2Fwp%2FlKeljXZ.jpg&f=1&nofb=1')`,
-    height: "66.5vh",
+    height: "100%",
     backgroundPosition: "center",
     backgroundRepeat: "no-repeat",
     backgroundSize: "cover",
@@ -529,7 +529,7 @@ function handleModalClick(id){
       <YouTubeIcon
         className={classes.clickableIcon}
         style={{marginRight :'10px',marginLeft : '10px', color: 'white'}}
-        onClick={() => alert("link toh daal bro")}
+        onClick={() => window.open("https://www.youtube.com/channel/UCTF80cOCjQcEDvV4QIQeEQA",'_blank')}
       />
       <GitHubIcon
           className={classes.clickableIcon}
