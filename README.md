@@ -55,7 +55,7 @@ Our app is still in the early stages of production, and there is a lot yet to co
 
 ## Demo video
 
-You can find the demo video at [care-quest.herokuapp.com](https://care-quest.herokuapp.com/)
+You can find the demo video at [wb.noormohammed.tech](https://wb.noormohammed.tech/)
 
 ## The architecture
 
@@ -63,7 +63,7 @@ You can find the demo video at [care-quest.herokuapp.com](https://care-quest.her
 
 ## Live demo
 
-You can find a running system to test at [care-quest.herokuapp.com](https://care-quest.herokuapp.com/)
+You can find a running system to test at [wb.noormohammed.tech](https://wb.noormohammed.tech/)
 
 ## Built with
 
