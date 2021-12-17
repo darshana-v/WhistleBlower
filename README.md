@@ -55,7 +55,7 @@ Our app is still in the early stages of production, and there is a lot yet to co
 
 ## Demo video
 
-You can find the demo video at [Video](https://youtu.be/clQsOBwOsLY).
+You can find the demo video at [Video](https://www.youtube.com/watch?v=Mst8ILBnNHk).
 
 ## The architecture
 
